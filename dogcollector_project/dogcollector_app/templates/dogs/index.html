@@ -5,18 +5,28 @@
 
     {% for dog in dogs %}
     <div class ="card">
+        <!-- Add this single line below for hyperlink-->
+        <!-- #url whos name is detail -->
+        <a href="{% url 'detail' dog.id %}">
         <div class="card-content">
             <span class="card-title">{{ dog.name }}</span>
             <p>Breed: {{dog.breed}}</p>
-            <p>Description: {{dog.description}}</p>
+            <p>Description: {{dog.description | linebreaks}}</p> 
             {% if dog.age > 0 %}
                 <p>Age: {{dog.age}}</p>
             {% else %}
                 <p>Age: Woof!</p>
             {% endif %} 
+                <p>Gender: {{ dog.gender }}</p>
+                <p>Color: {{ dog.color }}</p>
+                <p>Favorite Toy: {{ dog.favorite_toy }}</p>
         </div>
+        <!-- Add the following one as well -->
+        </a>
     </div>
 
     {% endfor %}
 
 {% endblock %}
+
+<!-- linebreaks allows users to input multiple lines -->
