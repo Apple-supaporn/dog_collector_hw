@@ -19,8 +19,15 @@
           <li><a href="/" class="left brand-logo">&nbsp;&nbsp;Dog Collector</a></li>
         </ul>
         <ul class="right">
-          <li><a href="/about">About</a></li>
-          <li><a href="/dogs">View All My Dogs</a></li>
+          <!-- all '<a> </a>'' is get request -->
+          <!-- update this to use 'url' template tag-->
+          <li><a href="{% url 'about' %}">About</a></li>
+          
+          <!-- This is for 'view a form for entering dog info' and 'create the dog when the form is submitted'-->
+          <li><a href="{% url 'dogs_create' %}">Add a Dog</a></li> 
+
+          <li><a href="{% url 'index' %}">View All My Dogs</a></li>
+
         </ul>
       </div>
     </nav>

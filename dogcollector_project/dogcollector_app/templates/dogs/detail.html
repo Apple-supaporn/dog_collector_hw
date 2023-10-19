@@ -16,6 +16,11 @@
             <p>Color: {{ dog.color }}</p>
             <p>Favorite Toy: {{ dog.favorite_toy }}</p>
     </div>
+    <!-- Update the UI as we need to see EDIT and DELETE links on a cat's detail page.-->
+    <div class="card-action">
+        <a href="{% url 'dogs_update' dog.id %}">Edit</a>
+        <a href="{% url 'dogs_delete' dog.id %}">Delete</a>
+      </div>
 </div>
 
 {% endblock %}

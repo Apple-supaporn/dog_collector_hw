@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse # Import the reverse function
 
 # Each Model is defined as a Python class that inherits from 'django.db.models.Model.'
 # An ERD Entity maps to a 'Model' in Django, which maps to a 'table' in the database.
@@ -19,3 +19,7 @@ class Dog(models.Model):
 # add this // don't forget to migreate when update model/shegema
     def __str__(self):
         return self.name
+
+# Add this method for handle redirecting for update and create
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'dog_id': self.id})

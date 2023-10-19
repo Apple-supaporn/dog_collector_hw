@@ -9,4 +9,12 @@ urlpatterns = [
 
     #Below is new route to show page each ID
     path('dogs/<int:dog_id>/', views.dogs_detail, name='detail'),
+
+    #new route used to show a form and create a dog
+    path('dogs/create/', views.DogCreate.as_view(), name='dogs_create'),
+
+    # add the two new routes for Update and Delete
+    # Updating & Deleting Data Using a CBV (Class-Based Views)
+    path('dogs/<int:pk>/update/', views.DogUpdate.as_view(), name='dogs_update'), #pk is primary key
+    path('dogs/<int:pk>/delete/', views.DogDelete.as_view(), name='dogs_delete'),
 ]
