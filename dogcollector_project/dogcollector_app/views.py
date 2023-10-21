@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect #add redirect to redirect after create new feeding
 from .models import Dog #don't forget to import data from database
+from .forms import FeedingForm # Import the FeedingForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView #add import to CreateView, UpdateView and DeleteView
 
 
@@ -29,7 +30,25 @@ def dogs_index(request):
 #Code for the view page each dog
 def dogs_detail(request, dog_id): #The dogs_detail function is using the get method to obtain the dog object by its id.
   dog = Dog.objects.get(id=dog_id) #dog id match with ID 
-  return render(request, 'dogs/detail.html', { 'dog': dog })
+  feeding_form = FeedingForm()
+  return render(request, 'dogs/detail.html', 
+    { 
+      'dog': dog, 
+      'feeding_form': feeding_form 
+    })
+
+
+def add_feeding(request, pk):
+  form = FeedingForm(request.POST)
+  if form.is_valid():
+    # don't save the form to the db until it has the dog_id assigned
+    new_feeding = form.save(commit=False)
+    new_feeding.dog_id = pk
+    new_feeding.save()
+  return redirect('detail', dog_id=pk)
+
+
+
 
 
 #class based 'VIEWS'

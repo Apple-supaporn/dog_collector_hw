@@ -17,4 +17,7 @@ urlpatterns = [
     # Updating & Deleting Data Using a CBV (Class-Based Views)
     path('dogs/<int:pk>/update/', views.DogUpdate.as_view(), name='dogs_update'), #pk is primary key
     path('dogs/<int:pk>/delete/', views.DogDelete.as_view(), name='dogs_delete'),
+
+    #Add add feeding
+    path('dogs/<int:pk>/add_feeding/', views.add_feeding, name='add_feeding'),
 ]
