@@ -2,6 +2,7 @@
 {% block content %}
 
 <h1>Accessory List</h1>
+<a href="{% url 'accessories_create' %}" class="btn">Add Accessory</a>
 
 {% for accessory in accessory_list %}
   <a href="{% url 'accessories_detail' accessory.id %}">
