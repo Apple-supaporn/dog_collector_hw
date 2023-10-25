@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect #add redirect to redirect after create new feeding
-from .models import Dog #don't forget to import data from database
+from .models import Dog, Accessory #don't forget to import data from database
 from .forms import FeedingForm # Import the FeedingForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView #add import to CreateView, UpdateView and DeleteView
+from django.views.generic import ListView, DetailView
 
 
 # dogs = [
@@ -30,11 +31,20 @@ def dogs_index(request):
 #Code for the view page each dog
 def dogs_detail(request, dog_id): #The dogs_detail function is using the get method to obtain the dog object by its id.
   dog = Dog.objects.get(id=dog_id) #dog id match with ID 
+  accessories = Accessory  #defind accessory with the model
+  # Get the accessories the dog doesn't have...
+  # First, create a list of the accessory ids that the dog DOES have
+  id_list = dog.accessories.all().values_list('id')
+  # Now we can query for accessories whose ids are not in the list using exclude
+  accessories_dog_doesnt_have = Accessory.objects.exclude(id__in=id_list)
+
   feeding_form = FeedingForm()
   return render(request, 'dogs/detail.html', 
     { 
       'dog': dog, 
-      'feeding_form': feeding_form 
+      'feeding_form': feeding_form,
+      # Add the accessories to be displayed
+      'accessories': accessories_dog_doesnt_have 
     })
 
 
@@ -48,6 +58,11 @@ def add_feeding(request, pk):
   return redirect('detail', dog_id=pk)
 
 
+def assoc_accessory(request, pk, accessory_pk):
+  #Note that you can pass an accessory's id instead of the whole accessory object
+  Dog.objects.get(id=pk).accessories.add(accessory_pk)
+  return redirect('detail', dog_id=pk)
+
 
 
 
@@ -56,7 +71,7 @@ class DogCreate(CreateView):  #passed the (CreateView)
   #first thing to tell is 'model' 
   model = Dog
   #to tell what field to use. This one is '__all__' means to contain all of the Dog Model's attributes.
-  fields = '__all__'
+  fields = ['name', 'breed', 'description', 'age', 'gender', 'color', 'favorite_toy']
   # optional 1 way 
   #success_url = '/dogs/{dog_id}'
 
@@ -69,3 +84,23 @@ class DogUpdate(UpdateView):
 class DogDelete(DeleteView):
   model = Dog
   success_url = '/dogs'
+
+
+# put this at the bottom of views.py
+class AccessoryList(ListView):
+  model = Accessory
+
+class AccessoryDetail(DetailView):
+  model = Accessory
+
+class AccessoryCreate(CreateView):
+  model = Accessory
+  fields = '__all__'
+
+class AccessoryUpdate(UpdateView):
+  model = Accessory
+  fields = ['name', 'type', 'color']
+
+class AccessoryDelete(DeleteView):
+  model = Accessory
+  success_url = '/accessories'

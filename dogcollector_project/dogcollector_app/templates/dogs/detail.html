@@ -1,54 +1,102 @@
 {% extends 'dogs/base.html' %}
 {% block content %}
 
+<!-- Dog's Details -->
 <h1>Dog Details</h1>
-
 <div class="row">
     <div class="col s6">    
         <div class ="card">
             <div class="card-content">
-            <span class="card-title">{{ dog.name }}</span>
-            <p>Breed: {{dog.breed}}</p>
-            <p>Description: {{dog.description | linebreaks}}</p> 
-            {% if dog.age > 0 %}
-                <p>Age: {{dog.age}}</p>
-            {% else %}
-                <p>Age: Woof!</p>
-            {% endif %} 
+                <span class="card-title">{{ dog.name }}</span>
+                <p>Breed: {{dog.breed}}</p>
+                <p>Description: {{dog.description | linebreaks}}</p> 
+                {% if dog.age > 0 %}
+                    <p>Age: {{dog.age}}</p>
+                {% else %}
+                    <p>Age: Woof!</p>
+                {% endif %} 
                 <p>Gender: {{ dog.gender }}</p>
                 <p>Color: {{ dog.color }}</p>
                 <p>Favorite Toy: {{ dog.favorite_toy }}</p>
             </div>
-            <!-- Update the UI as we need to see EDIT and DELETE links on a cat's detail page.-->
+            <!-- Update the UI as we need to see EDIT and DELETE links on a dog's detail page.-->
             <div class="card-action">
                 <a href="{% url 'dogs_update' dog.id %}">Edit</a>
                 <a href="{% url 'dogs_delete' dog.id %}">Delete</a>
             </div>
         </div>
     </div>
-
+    <!-- Feeding Markup -->
     <div class="col s6">
-
         <form action="{% url 'add_feeding' dog.id %}" method="POST">
             {% csrf_token %}
             <!-- Render the inputs -->
             {{ feeding_form.as_p }}
             <input type="submit" class="btn" value="Add Feeding">
         </form>
-
         <table class="striped">
             <thead>
                 <tr><th>Date</th><th>Meal</th></tr>
             </thead>
-        <tbody>
-            {% for feeding in dog.feeding_set.all %}
-                <tr>
-                    <td>{{feeding.date}}</td>
-                    <td>{{feeding.get_meal_display}}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+            <tbody>
+                {% for feeding in dog.feeding_set.all %}
+                    <tr>
+                        <td>{{feeding.date}}</td>
+                        <td>{{feeding.get_meal_display}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
+    </div>
+</div>
+<!-- End one section -->
+<!-- Dog's Accessories -->
+<hr>
+<div class="row">
+    <div class="col s6">
+        <h3>{{ dog.name }}'s Accessories</h3>
+        {% if dog.accessories.count %}
+            {% for accessory in dog.accessories.all %}
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">
+                            A <span style="color: {{ accessory.color }}">{{ accessory.color }}</span> {{ accessory.name }}
+                        </span>
+                    </div>
+                    <div class="card-action">
+                    <!-- Update the action Attribute  -->
+                        <a href="{% url 'accessories_update' accessory.id %}">Edit</a>
+                        <a href="{% url 'accessories_delete' accessory.id %}">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h5>No Accessories 😿</h5>
+        {% endif %}
+    </div>
+    <!-- Available Accessories -->
+    <div class="col s6">
+        <h3>Available Accessories</h3>
+        {% if accessories.count %}
+            {% for accessory in accessories.all %}
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">
+                            A <span style="color: {{ accessory.color }}">{{ accessory.color }}</span> {{ accessory.name }}
+                        </span>
+                    </div>
+                    <div class="card-action">
+                    <!-- Update the action Attribute  -->
+                        <form action="{% url 'assoc_accessory' dog.id accessory.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn">Add</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h5>{{dog.name}} Already Has All Accessories Available</h5>
+        {% endif %}
     </div>
 </div>
 
@@ -66,7 +114,5 @@
     const selectEl = document.getElementById('id_meal');
     M.FormSelect.init(selectEl);
 </script>
-
-
 
 {% endblock %}

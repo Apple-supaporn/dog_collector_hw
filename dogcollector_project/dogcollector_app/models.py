@@ -11,6 +11,20 @@ MEALS = (
     ('D', 'Dinner')
 )
 
+#Order is doesn't matter
+#many-to-many relationships
+class Accessory(models.Model):
+    name = models.CharField(max_length=50)
+    type = models.CharField(max_length=50)
+    color = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse('accessories_detail', kwargs={'pk': self.id})
+
+
 
 
 # Each Model is defined as a Python class that inherits from 'django.db.models.Model.'
@@ -26,6 +40,9 @@ class Dog(models.Model):
     gender = models.CharField(max_length=10)
     color = models.CharField(max_length=50)
     favorite_toy = models.CharField(max_length=100, blank=True)
+    # Add the M:M relationship
+    accessories = models.ManyToManyField(Accessory)
+
 
 
 # add this // don't forget to migreate when update model/shegema
