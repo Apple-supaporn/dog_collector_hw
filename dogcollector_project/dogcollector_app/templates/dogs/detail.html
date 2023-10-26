@@ -25,6 +25,23 @@
                 <a href="{% url 'dogs_delete' dog.id %}">Delete</a>
             </div>
         </div>
+
+        <!-- Insert PHOTO markup below this comment -->
+        {% for photo in dog.photo_set.all %}
+            <img class="responsive-img card-panel" src="{{photo.url}}" alt="dog">
+        {% empty %}
+            <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+        {% endfor %}
+
+        <!-- Form for Uploading Photos -->
+        <form action="{% url 'add_photo' dog.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+            <!-- need to have crsf_token every form -->
+            {% csrf_token %}
+            <input type="file" name="photo-file">
+            <br><br>
+            <button type="submit" class="btn">Upload Photo</button>
+        </form>
+
     </div>
     <!-- Feeding Markup -->
     <div class="col s6">
@@ -66,7 +83,7 @@
                     <div class="card-action">
                     <!-- Update the action Attribute  -->
                         <a href="{% url 'accessories_update' accessory.id %}">Edit</a>
-                        <a href="{% url 'accessories_delete' accessory.id %}">Delete</a>
+                        <a href="{% url 'assoc_delete' dog.id accessory.id %}">Delete</a>
                     </div>
                 </div>
             {% endfor %}
@@ -100,7 +117,10 @@
     </div>
 </div>
 
+<!-- if you need materialize to handle various JS function it requires, put this on base.html -->
 <script>
+    // Django form model creates id_field automatically when rendering to HTML
+    // so our date picker needs to grab the id_date for tag/id 
     const dateEl = document.getElementById('id_date');
     // M is Materialize's global variable
     M.Datepicker.init(dateEl, {

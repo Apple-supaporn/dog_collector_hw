@@ -1,12 +1,16 @@
 from django.contrib import admin
-from .models import Dog, Feeding, Accessory #import Dog and Feeding
+from .models import Dog, Feeding, Accessory, Photo
 
-# Register your models here. (for admin site)
-admin.site.register(Dog) #add this to see dog data in admin site
+## REGISTER MODELS HERE (FOR ADMIN SITE) ##
 
-# register the new 'Feeding' Model 
+# register Dog Model 
+admin.site.register(Dog)
+
+# register Feeding Model 
 admin.site.register(Feeding)
-
 
 # register Accessory model
 admin.site.register(Accessory)
+
+# register Photo model
+admin.site.register(Photo)
